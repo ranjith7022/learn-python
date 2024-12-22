@@ -1,8 +1,10 @@
-def sum_nested_list(lst):
-    count = 0
-    for item in lst:
-        if isinstance(item, list):
-            count += sum_nested_list(item)
-        else:
-            count += item
-    return count
+def count_nested_levels(nested_documents, target_document_id, level=1):
+    result = -1
+    for id,val in nested_documents.items():
+        if id == target_document_id:
+            result = level
+            return result
+        elif id != target_document_id and len(val)== 1 and isinstance(val,dict):
+            result = count_nested_levels(val,target_document_id,level=level+1)
+    
+    return result
