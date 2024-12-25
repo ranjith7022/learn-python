@@ -1,39 +1,73 @@
 from main import *
 
 run_cases = [
-    ("Either that wallpaper goes, or I do.", "wallpaper"),
     (
-        "Then I die happy",
-        "happy",
+        10,
+        "Autobots roll out! The Autobots are always ready for battle.",
+        [
+            "Autobots",
+            "roll out!",
+            "The",
+            "Autobots",
+            "are always",
+            "ready for",
+            "battle.",
+        ],
     ),
     (
-        "Et tu, Brute?",
-        "Brute?",
+        20,
+        "Optimus Prime is the leader of the Autobots. Megatron is the archenemy of the Autobots.",
+        [
+            "Optimus Prime is the",
+            "leader of the",
+            "Autobots. Megatron",
+            "is the archenemy of",
+            "the Autobots.",
+        ],
+    ),
+    (
+        30,
+        "Autobots often disguise themselves as vehicles on Earth. The Autobots protect humanity from the Decepticons.",
+        [
+            "Autobots often disguise",
+            "themselves as vehicles on",
+            "Earth. The Autobots protect",
+            "humanity from the Decepticons.",
+        ],
     ),
 ]
+
 
 submit_cases = run_cases + [
     (
+        0,
         "",
-        "",
+        [],
     ),
     (
-        " ",
-        "",
+        0,
+        "Cybertron is the home planet of the Autobots.",
+        ["Cybertron", "is", "the", "home", "planet", "of", "the", "Autobots."],
     ),
     (
-        "Let us cross over the river and rest under the shade of the trees",
-        "cross",
+        90,
+        "Bumblebee transforms into a yellow Camaro. Ratchet is the medical officer for the Autobots.",
+        [
+            "Bumblebee transforms into a yellow Camaro. Ratchet is the medical officer for the",
+            "Autobots.",
+        ],
     ),
 ]
 
 
-def test(input1, expected_output):
+def test(page_length, document, expected_output):
     print("---------------------------------")
-    print(f"Input: '{input1}'")
-    print(f"Expecting: '{expected_output}'")
-    result = find_longest_word(input1)
-    print(f"Actual: '{result}'")
+    print(f"Inputs:")
+    print(f" * page_length: {page_length}")
+    print(f" * document: {document}")
+    print(f"Expecting: {expected_output}")
+    result = paginator(page_length)(document)
+    print(f"   Actual: {result}")
     if result == expected_output:
         print("Pass")
         return True

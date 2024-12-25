@@ -1,8 +1,22 @@
-def find_longest_word(document, longest_word=""):
-    if(document==""):
-        return longest_word
-    longest_word = document.split(' ',1)[0] if len(document.split(' ',1)[0]) > len(longest_word) else longest_word
-    if(len(document.split(" ",1))>1):
-        return find_longest_word(document.split(" ",1)[1],longest_word)
-    else:
-        return find_longest_word("",longest_word)
+from functools import reduce
+
+
+def paginator(page_length):
+    def paginate(document):
+        words = document.split()
+
+        def add_word_to_pages(pages, word):
+            if not pages:
+                pages = [word]
+                return pages
+            current_page = pages[-1]
+            if(len(current_page)+len(word)+1 > page_length):
+                pages.append(word)
+            else:
+                current_page +=" "+ word
+                pages[-1] = current_page
+            return pages
+
+        return reduce(add_word_to_pages, words, [])
+
+    return paginate
