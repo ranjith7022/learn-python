@@ -1,73 +1,147 @@
 from main import *
 
+try:
+    (EditType.SUBSTITUTE and EditType.INSERT and EditType.DELETE and EditType.NEWLINE)
+except Exception as error:
+    print(f"Error: Missing attribute {error} from enum")
+
+    class EditType(Enum):
+        SUBSTITUTE = None
+        INSERT = None
+        DELETE = None
+        NEWLINE = None
+
+
 run_cases = [
     (
-        10,
-        "Autobots roll out! The Autobots are always ready for battle.",
-        [
-            "Autobots",
-            "roll out!",
-            "The",
-            "Autobots",
-            "are always",
-            "ready for",
-            "battle.",
-        ],
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this immediately now!
+
+Sincerely,""",
+        EditType.SUBSTITUTE,
+        {
+            "insert_text": "right",
+            "line_number": 5,
+            "start": 9,
+            "end": 20,
+        },
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this right now!
+
+Sincerely,""",
     ),
     (
-        20,
-        "Optimus Prime is the leader of the Autobots. Megatron is the archenemy of the Autobots.",
-        [
-            "Optimus Prime is the",
-            "leader of the",
-            "Autobots. Megatron",
-            "is the archenemy of",
-            "the Autobots.",
-        ],
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this right now!
+
+Sincerely,""",
+        EditType.NEWLINE,
+        {
+            "line_number": 7,
+        },
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this right now!
+
+Sincerely,
+""",
     ),
     (
-        30,
-        "Autobots often disguise themselves as vehicles on Earth. The Autobots protect humanity from the Decepticons.",
-        [
-            "Autobots often disguise",
-            "themselves as vehicles on",
-            "Earth. The Autobots protect",
-            "humanity from the Decepticons.",
-        ],
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this right now!
+
+Sincerely,
+""",
+        EditType.INSERT,
+        {
+            "insert_text": "Karen",
+            "line_number": 8,
+            "start": 0,
+        },
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this right now!
+
+Sincerely,
+Karen""",
+    ),
+    (
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+an total disaster.
+Fix this right now!
+
+Sincerely,
+Karen""",
+        EditType.DELETE,
+        {
+            "line_number": 4,
+            "start": 1,
+            "end": 2,
+        },
+        """Dear Manager,
+
+I’m outraged!
+My car warranty is
+a total disaster.
+Fix this right now!
+
+Sincerely,
+Karen""",
     ),
 ]
-
 
 submit_cases = run_cases + [
     (
-        0,
-        "",
-        [],
-    ),
-    (
-        0,
-        "Cybertron is the home planet of the Autobots.",
-        ["Cybertron", "is", "the", "home", "planet", "of", "the", "Autobots."],
-    ),
-    (
-        90,
-        "Bumblebee transforms into a yellow Camaro. Ratchet is the medical officer for the Autobots.",
-        [
-            "Bumblebee transforms into a yellow Camaro. Ratchet is the medical officer for the",
-            "Autobots.",
-        ],
+        "test string",
+        "Unknown edit type",
+        {},
+        "Unknown edit type",
     ),
 ]
 
 
-def test(page_length, document, expected_output):
+def test(document, edit_type, edit, expected_output):
     print("---------------------------------")
-    print(f"Inputs:")
-    print(f" * page_length: {page_length}")
-    print(f" * document: {document}")
-    print(f"Expecting: {expected_output}")
-    result = paginator(page_length)(document)
-    print(f"   Actual: {result}")
+    print(f"Change Type: {edit_type}")
+    print("Inputs:")
+    for key, val in edit.items():
+        print(f"* {key}: {val}")
+    print("Expected:")
+    print(expected_output)
+    try:
+        result = handle_edit(document, edit_type, edit)
+    # catch expected error or else raise unexpected error again
+    except Exception as e:
+        if type(e) is not Exception:
+            raise
+        result = str(e)
+    print("Actual:")
+    print(result)
     if result == expected_output:
         print("Pass")
         return True
