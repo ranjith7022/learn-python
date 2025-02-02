@@ -1,36 +1,26 @@
-from enum import Enum
+def merge_sort(nums):
+    if(len(nums)<2):
+        return nums
+    N = len(nums)
+    sorted_left_side,sorted_right_side = merge_sort(nums[0:N//2]),merge_sort(nums[N//2:])
+    return merge(sorted_left_side,sorted_right_side)
 
 
-class EditType(Enum):
-    NEWLINE = 1
-    SUBSTITUTE = 2
-    INSERT = 3
-    DELETE = 4
+def merge(first, second):
+    final = []
+    i,j =0,0
+    
+    while i < len(first) and j < len(second):
+        if first[i] <= second[j] :
+            final.append(first[i])
+            i+=1
+        else:
+            final.append(second[j])
+            j+=1
+    
+    final.extend(first[i:])
+    final.extend(second[j:])
+    
+    return final
 
-
-def handle_edit(document, edit_type, edit):
-    match edit_type:
-
-        case EditType.NEWLINE:
-            value = document.split("\n")
-            value.insert(edit['line_number']+1, '')
-            return "\n".join(value)
-        case EditType.INSERT:
-            value = document.split("\n")
-            value.insert(edit['line_number'], edit["insert_text"])
-            #value.pop()
-            return "\n".join(value)
-        case EditType.DELETE:
-            value = document.split("\n")
-            value[edit["line_number"]] = value[edit["line_number"]
-                                               ][:edit["start"]] + value[edit["line_number"]][edit["end"]:]  # +
-            return "\n".join(value)
-        case EditType.SUBSTITUTE:
-            value = document.split("\n")
-            value[edit["line_number"]] = value[edit["line_number"]][:edit["start"]] + \
-                edit["insert_text"] + \
-                value[edit["line_number"]][edit["end"]:]  # +
-            return "\n".join(value)
-
-        case _:
-            raise Exception("Unknown edit type")
+#print(merge([1,3,5,7],[2,4,6,8]))
