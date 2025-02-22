@@ -66,3 +66,51 @@ def merge(first, second):
     return final
 
 #print(merge([1,3,5,7],[2,4,6,8]))
+
+# revisit
+def quick_sort(nums, low, high):
+    if low < high:
+        p = partition(nums,low,high)
+        quick_sort(nums,low,p-1)
+        quick_sort(nums,p+1,high)
+        
+
+
+def partition(nums, low, high):
+    i = low 
+    pivot = nums[high]
+    for j in range(low,high):
+        if nums[j] < pivot:
+            nums[i],nums[j] = nums[j],nums[i]
+            i+=1
+    nums[high],nums[i] = nums[i],nums[high]
+    return i
+    
+    
+    
+def selection_sort(nums):
+
+    for i in range(len(nums)):
+        smallest_idx = i
+        for j in range(smallest_idx+1,len(nums)):
+            if (nums[j] < nums[smallest_idx]):
+                smallest_idx = j
+        nums[smallest_idx],nums[i] = nums[i],nums[smallest_idx]
+        
+    return nums
+
+
+#2^n example
+
+def power_set(input_set):
+    if not input_set:
+        return [[]]
+    result = []
+    first = input_set[0]
+    rest = power_set(input_set[1:])
+    for i in rest:
+        result.append([first]+i)
+        result.append(i)
+    
+    return result
+

@@ -1,50 +1,76 @@
 from main import *
-import time
 
-run_cases = [([3, 2, 1], [1, 2, 3]), ([5, 4, 3, 2, 1], [1, 2, 3, 4, 5])]
+run_cases = [
+    (["Major Marquis Warren", "John Ruth"], ["John Ruth", "Major Marquis Warren"]),
+    (
+        ["Major Marquis Warren", "John Ruth", "Daisy Domergue"],
+        ["Daisy Domergue", "John Ruth", "Major Marquis Warren"],
+    ),
+]
 
 submit_cases = run_cases + [
-    ([], []),
-    ([7], [7]),
-    ([4, -7, 1, 0, 5], [-7, 0, 1, 4, 5]),
-    ([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
-    ([1, 1, 1, 1, 1], [1, 1, 1, 1, 1]),
+    (
+        ["Major Marquis Warren", "John Ruth", "Daisy Domergue", "Chris Mannix"],
+        ["Chris Mannix", "Daisy Domergue", "John Ruth", "Major Marquis Warren"],
+    ),
+    (
+        ["Major Marquis Warren", "John Ruth", "Daisy Domergue", "Chris Mannix", "Bob"],
+        ["Bob", "Chris Mannix", "Daisy Domergue", "John Ruth", "Major Marquis Warren"],
+    ),
+    (
+        [
+            "Major Marquis Warren",
+            "John Ruth",
+            "Daisy Domergue",
+            "Chris Mannix",
+            "Bob",
+            "Oswaldo Mobray",
+        ],
+        [
+            "Oswaldo Mobray",
+            "Bob",
+            "Chris Mannix",
+            "Daisy Domergue",
+            "John Ruth",
+            "Major Marquis Warren",
+        ],
+    ),
 ]
 
 
-def test(input1, expected_output):
+def test(inputs, expected_state):
     print("---------------------------------")
-    print(f"Input: {input1}")
-    print(f"Expecting: {expected_output}")
-    start = time.time()
-    result = merge_sort(input1)
-    end = time.time()
-    timeout = 1.00
-    if (end - start) < timeout:
-        print(f"test completed in less than {timeout * 1000} milliseconds!")
-        if result == expected_output:
-            print(f"Actual: {result}")
-            print("Pass")
-            return True
-        print(f"Actual: {result}")
-        print("Fail")
-        return False
+    linked_list = LinkedList()
+    for val in inputs:
+        linked_list.add_to_head(Node(val))
+    result = linked_list_to_list(linked_list)
+
+    print(f"Input:  {inputs}")
+    print(f"Expect: {expected_state}")
+    print(f"Actual: {result}")
+
+    if result == expected_state:
+        print("Pass")
+        return True
     else:
-        print(f"test took longer than {timeout * 1000} milliseconds!")
-        print(f"Actual: {result}")
         print("Fail")
         return False
 
 
-def main():
+def linked_list_to_list(linked_list):
+    return [node.val for node in linked_list]
+
+
+def main(test_cases):
     passed = 0
     failed = 0
-    for test_case in test_cases:
-        correct = test(*test_case)
-        if correct:
+
+    for inputs, expected_state in test_cases:
+        if test(inputs, expected_state):
             passed += 1
         else:
             failed += 1
+
     if failed == 0:
         print("============= PASS ==============")
     else:
@@ -52,8 +78,7 @@ def main():
     print(f"{passed} passed, {failed} failed")
 
 
-test_cases = submit_cases
 if "__RUN__" in globals():
-    test_cases = run_cases
-
-main()
+    main(run_cases)
+else:
+    main(submit_cases)
