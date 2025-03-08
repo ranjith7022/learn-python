@@ -1,84 +1,75 @@
-from main import *
+from main import BSTNode
+from user import get_users
 
 run_cases = [
-    (["Major Marquis Warren", "John Ruth"], ["John Ruth", "Major Marquis Warren"]),
-    (
-        ["Major Marquis Warren", "John Ruth", "Daisy Domergue"],
-        ["Daisy Domergue", "John Ruth", "Major Marquis Warren"],
-    ),
+    (2, 2),
+    (6, 3),
 ]
 
 submit_cases = run_cases + [
-    (
-        ["Major Marquis Warren", "John Ruth", "Daisy Domergue", "Chris Mannix"],
-        ["Chris Mannix", "Daisy Domergue", "John Ruth", "Major Marquis Warren"],
-    ),
-    (
-        ["Major Marquis Warren", "John Ruth", "Daisy Domergue", "Chris Mannix", "Bob"],
-        ["Bob", "Chris Mannix", "Daisy Domergue", "John Ruth", "Major Marquis Warren"],
-    ),
-    (
-        [
-            "Major Marquis Warren",
-            "John Ruth",
-            "Daisy Domergue",
-            "Chris Mannix",
-            "Bob",
-            "Oswaldo Mobray",
-        ],
-        [
-            "Oswaldo Mobray",
-            "Bob",
-            "Chris Mannix",
-            "Daisy Domergue",
-            "John Ruth",
-            "Major Marquis Warren",
-        ],
-    ),
+    (0, 0),
+    (1, 1),
+    (16, 7),
 ]
 
 
-def test(inputs, expected_state):
+def test(num_users, expected_output):
+    users = get_users(num_users)
+    if not users:
+        root = BSTNode()
+    else:
+        root = BSTNode(users[0])
+        for user in users[1:]:
+            root.insert(user)
+
     print("---------------------------------")
-    linked_list = LinkedList()
-    for val in inputs:
-        linked_list.add_to_head(Node(val))
-    result = linked_list_to_list(linked_list)
-
-    print(f"Input:  {inputs}")
-    print(f"Expect: {expected_state}")
-    print(f"Actual: {result}")
-
-    if result == expected_state:
+    print(f"Users: {[str(user) for user in users]}")
+    print_tree(root)
+    print(f"Expecting height: {expected_output}")
+    result = root.height()
+    print(f"Actual height: {result}")
+    if result == expected_output:
         print("Pass")
         return True
-    else:
-        print("Fail")
-        return False
+    print("Fail")
+    return False
 
 
-def linked_list_to_list(linked_list):
-    return [node.val for node in linked_list]
-
-
-def main(test_cases):
+def main():
     passed = 0
     failed = 0
-
-    for inputs, expected_state in test_cases:
-        if test(inputs, expected_state):
+    skipped = len(submit_cases) - len(test_cases)
+    for test_case in test_cases:
+        correct = test(*test_case)
+        if correct:
             passed += 1
         else:
             failed += 1
-
     if failed == 0:
         print("============= PASS ==============")
     else:
         print("============= FAIL ==============")
-    print(f"{passed} passed, {failed} failed")
+    if skipped > 0:
+        print(f"{passed} passed, {failed} failed, {skipped} skipped")
+    else:
+        print(f"{passed} passed, {failed} failed")
 
 
+def print_tree(bst_node):
+    lines = []
+    format_tree_string(bst_node, lines)
+    print("\n".join(lines))
+
+
+def format_tree_string(bst_node, lines, level=0):
+    if bst_node is not None:
+        format_tree_string(bst_node.right, lines, level + 1)
+        lines.append(" " * 4 * level + "> " + str(bst_node.val))
+        format_tree_string(bst_node.left, lines, level + 1)
+
+
+test_cases = submit_cases
 if "__RUN__" in globals():
-    main(run_cases)
-else:
-    main(submit_cases)
+    test_cases = run_cases
+
+main()
