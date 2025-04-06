@@ -60,4 +60,5 @@ class BSTNode:
             self.right.insert(val)
             return
         self.right = BSTNode(val)
+        return
         

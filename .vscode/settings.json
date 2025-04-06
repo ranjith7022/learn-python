@@ -3,4 +3,5 @@
   "workbench.iconTheme": "vs-seti-jetbrainsmononerdfontmono",
   "editor.fontLigatures": true,
   "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', 'Droid Sans Mono', 'monospace', monospace",
+  "editor.fontSize": 14
 }
