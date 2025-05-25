@@ -1,61 +1,41 @@
-import random
+import json
 from main import *
-from user import *
-from ref import *
 
 run_cases = [
-    (4),
-    (8),
+    (["dev", "devops", "designer", "director"], "de", ["dev", "devops", "designer"]),
+    (["manager", "intern"], "z", []),
+    (["cto", "cfo", "coo", "ceo"], "c", ["cto", "cfo", "coo", "ceo"]),
 ]
 
 submit_cases = run_cases + [
-    (10),
+    (
+        ["developer", "designer", "devops", "director"],
+        "de",
+        ["developer", "designer", "devops"],
+    ),
 ]
 
 
-def print_tree(node):
-    lines = []
-    format_tree_string(node.root, lines)
-    print("\n".join(lines))
-
-
-def format_tree_string(node, lines, level=0):
-    if node.val is not None:
-        format_tree_string(node.right, lines, level + 1)
-        lines.append(
-            " " * 4 * level
-            + "> "
-            + str(node.val)
-            + " "
-            + ("[red]" if node.red else "[black]")
-        )
-        format_tree_string(node.left, lines, level + 1)
-
-
-def test(num_users):
-    users = get_users(num_users)
-    ref_tree = RBTree()
-    for user in users:
-        ref_implementation(ref_tree, user)
-    print("============ NEW TEST ===============")
-    actual_tree = RBTree()
-    for user in users:
-        print(f"Inserting {user} into tree...")
-        actual_tree.insert(user)
-    print("-------------------------------------")
-    print("Expecting Tree:")
-    print("-------------------------------------")
-    print_tree(ref_tree)
-    print("-------------------------------------")
-    print("Actual Tree:")
-    print("-------------------------------------")
-    print_tree(actual_tree)
-    print("-------------------------------------")
-    if ref_inorder(actual_tree.root, []) == ref_inorder(ref_tree.root, []):
-        print("Pass")
-        return True
-    print("Fail")
-    return False
+def test(words, prefix, expected_matches):
+    print("---------------------------------")
+    print("Trie:")
+    trie = Trie()
+    for word in words:
+        trie.add(word)
+    print(json.dumps(trie.root, sort_keys=True, indent=2))
+    print(f'Words with prefix: "{prefix}":')
+    print(f"Expecting: {expected_matches}")
+    try:
+        actual = trie.words_with_prefix(prefix)
+        print(f"Actual: {actual}")
+        if (actual) == sorted(expected_matches):
+            print("Pass \n")
+            return True
+        print("Fail \n")
+        return False
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
 
 def main():
@@ -63,7 +43,7 @@ def main():
     failed = 0
     skipped = len(submit_cases) - len(test_cases)
     for test_case in test_cases:
-        correct = test(test_case)
+        correct = test(*test_case)
         if correct:
             passed += 1
         else:
@@ -83,3 +63,4 @@ if "__RUN__" in globals():
     test_cases = run_cases
 
 main()
+

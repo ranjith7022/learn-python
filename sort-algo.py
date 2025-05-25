@@ -73,6 +73,7 @@ def quick_sort(nums, low, high):
         p = partition(nums,low,high)
         quick_sort(nums,low,p-1)
         quick_sort(nums,p+1,high)
+    return nums
         
 
 
@@ -113,4 +114,13 @@ def power_set(input_set):
         result.append(i)
     
     return result
+
+# print(quick_sort([10,2,3,4,5,6,7,8,9,1],0,9))
+import time
+start_time = time.perf_counter()
+power_set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21])
+end_time = time.perf_counter()
+execution_time = end_time - start_time
+
+print(f"Execution time: {execution_time:.6f} seconds")
 

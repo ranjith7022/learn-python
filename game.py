@@ -28,6 +28,7 @@ hexagon_center_y = HEIGHT // 2
 hexagon_side_length = 100
 hexagon_color = WHITE
 
+
 def calculate_hexagon_vertices(center_x, center_y, side_length):
     """Calculates the vertices of a hexagon."""
     vertices = []
@@ -39,13 +40,16 @@ def calculate_hexagon_vertices(center_x, center_y, side_length):
         vertices.append((x, y))
     return vertices
 
+
 hexagon_vertices = calculate_hexagon_vertices(
     hexagon_center_x, hexagon_center_y, hexagon_side_length
 )
 
+
 def distance(x1, y1, x2, y2):
     """Calculates the distance between two points."""
-    return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+    return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+
 
 def check_collision(ball_x, ball_y, ball_radius, v1x, v1y, v2x, v2y):
     """Checks for collision between the ball and a line segment."""
@@ -81,7 +85,10 @@ def check_collision(ball_x, ball_y, ball_radius, v1x, v1y, v2x, v2y):
     else:
         return False, 0, 0
 
-def reflect_velocity(ball_x, ball_y, ball_vx, ball_vy, line_x1, line_y1, line_x2, line_y2):
+
+def reflect_velocity(
+    ball_x, ball_y, ball_vx, ball_vy, line_x1, line_y1, line_x2, line_y2
+):
     """Reflects the ball's velocity based on the collision with a line."""
     # Calculate the normal vector to the line
     normal_x = line_y2 - line_y1
@@ -104,6 +111,7 @@ def reflect_velocity(ball_x, ball_y, ball_vx, ball_vy, line_x1, line_y1, line_x2
 
     return reflected_vx, reflected_vy
 
+
 # Game loop
 running = True
 clock = pygame.time.Clock()
@@ -123,10 +131,14 @@ while running:
         v1x, v1y = hexagon_vertices[i]
         v2x, v2y = hexagon_vertices[(i + 1) % 6]  # Next vertex (loop around)
 
-        collided, _, _ = check_collision(ball_x, ball_y, ball_radius, v1x, v1y, v2x, v2y)
+        collided, _, _ = check_collision(
+            ball_x, ball_y, ball_radius, v1x, v1y, v2x, v2y
+        )
 
         if collided:
-            ball_vx, ball_vy = reflect_velocity(ball_x, ball_y, ball_vx, ball_vy, v1x, v1y, v2x, v2y)
+            ball_vx, ball_vy = reflect_velocity(
+                ball_x, ball_y, ball_vx, ball_vy, v1x, v1y, v2x, v2y
+            )
             # Small adjustment to move the ball out of the collision
             ball_x += ball_vx
             ball_y += ball_vy
