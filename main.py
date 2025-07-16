@@ -1,24 +1,19 @@
-class Trie:
-    def find_matches(self, document):
-        matches = set()
-        current = self.root
-        for i in document:
-            for j in current:
-                pass
-                
+def verify_tsp(paths, dist, actual_path):
+    total = 0
+    first = None
+    for i in range(len(actual_path)):
+        
+        if i==0:
+            first = actual_path[i]
+            continue
             
+        total += paths[first][actual_path[i]]
+        first = actual_path[i]
             
-
-    # don't touch below this line
-
-    def __init__(self):
-        self.root = {}
-        self.end_symbol = "*"
-
-    def add(self, word):
-        current = self.root
-        for letter in word:
-            if letter not in current:
-                current[letter] = {}
-            current = current[letter]
-        current[self.end_symbol] = True
+        
+    if total < dist:
+        return True
+    return False
+        
+        
+        
